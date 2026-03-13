@@ -59,19 +59,32 @@ git fetch origin main && git merge origin/main --no-edit
 
 ## Step 3: Run tests (on merged code)
 
-Run both checks in parallel:
+**1. Locate test commands:**
+1. Read the project instructions file (AGENTS.md if present, else CLAUDE.md, else README.md) and look for a **"Test commands"** section. Prefer a fenced code block or bullet list of commands.
+2. If found, use those commands in the given order.
 
-```bash
-pnpm lint 2>&1 | tee /tmp/ship_lint.txt &
-pnpm build 2>&1 | tee /tmp/ship_build.txt &
-wait
-```
+**2. If no explicit test commands, use stack heuristics (no questions, no confirmation):**
+- If `package.json` exists:
+  - Choose package manager by lockfile: `pnpm-lock.yaml` → `pnpm`, `yarn.lock` → `yarn`, `package-lock.json` → `npm`.
+  - Read `package.json` scripts and run any of these in order if present: `lint`, `test`, `build`.
+- If `Gemfile` or `Gemfile.lock` exists:
+  - Run `bundle exec rspec` if `spec/` exists; else `bundle exec rake test` if `test/` exists.
+  - Run `bundle exec rubocop` if `.rubocop.yml` exists.
+- If `go.mod` exists: run `go test ./...`.
+- If `pyproject.toml` or `requirements.txt` exists:
+  - Run `pytest` if `tests/` exists or `pytest.ini` is present.
+- If `Cargo.toml` exists: run `cargo test`.
+- If none of the above match: print **"No test commands found — skipping tests."** and continue.
 
-After both complete, read the output files and check pass/fail.
+**3. Run the commands:**
+- Run up to two commands in parallel only if they are independent; otherwise run sequentially.
+- Tee each command to `/tmp/ship_<name>.txt` and wait for completion.
+
+After all commands complete, read the output files and check pass/fail.
 
 **If any test fails:** Show the failures and **STOP**. Do not proceed.
 
-**If all pass:** Continue silently — just note the counts briefly.
+**If all pass (or tests were skipped):** Continue silently — just note the counts briefly.
 
 ---
 
