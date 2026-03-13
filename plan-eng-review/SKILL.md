@@ -75,7 +75,7 @@ Evaluate:
 ### 3. Test review
 Make a diagram of all new UX, new data flow, new codepaths, and new branching if statements or outcomes. For each, note what is new about the features discussed in this branch and plan. Then, for each new item in the diagram, make sure there is a JS or Rails test.
 
-For LLM/prompt changes: check the "Prompt/LLM changes" file patterns listed in CLAUDE.md. If this plan touches ANY of those patterns, state which eval suites must be run, which cases should be added, and what baselines to compare against. Then use AskUserQuestion to confirm the eval scope with the user.
+For LLM/prompt changes: check the "Prompt/LLM changes" file patterns listed in the project instructions file (AGENTS.md if present, else CLAUDE.md, else README.md). If this plan touches ANY of those patterns, state which eval suites must be run, which cases should be added, and what baselines to compare against. Then use AskUserQuestion to confirm the eval scope with the user. If no patterns are defined, explicitly state that evals are skipped unless the user specifies otherwise.
 
 **STOP.** For each issue found in this section, call AskUserQuestion individually. One issue per call. Present options, state your recommendation, explain WHY. Do NOT batch multiple issues into one AskUserQuestion. Only proceed to the next section after ALL issues in this section are resolved.
 
@@ -110,7 +110,7 @@ Every plan review MUST produce a "NOT in scope" section listing work that was co
 ### "What already exists" section
 List existing code/flows that already partially solve sub-problems in this plan, and whether the plan reuses them or unnecessarily rebuilds them.
 
-### TODOS.md updates
+### Tasks file updates
 After all review sections are complete, present each potential TODO as its own individual AskUserQuestion. Never batch TODOs — one per question. Never silently skip this step.
 
 For each TODO, describe:
@@ -121,7 +121,7 @@ For each TODO, describe:
 * **Context:** Enough detail that someone picking this up in 3 months understands the motivation, the current state, and where to start.
 * **Depends on / blocked by:** Any prerequisites or ordering constraints.
 
-Then present options: **A)** Add to TODOS.md **B)** Skip — not valuable enough **C)** Build it now in this PR instead of deferring.
+Then present options: **A)** Add to the tasks source (tasks folder or PRD/TASK markdown) **B)** Skip — not valuable enough **C)** Build it now in this PR instead of deferring.
 
 Do NOT just append vague bullet points. A TODO without context is worse than no TODO — it creates false confidence that the idea was captured while actually losing the reasoning.
 
@@ -145,7 +145,7 @@ At the end of the review, fill in and display this summary so the user can see a
 - Performance Review: ___ issues found
 - NOT in scope: written
 - What already exists: written
-- TODOS.md updates: ___ items proposed to user
+- Tasks file updates: ___ items proposed to user
 - Failure modes: ___ critical gaps flagged
 
 ## Retrospective learning

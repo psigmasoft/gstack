@@ -32,7 +32,7 @@ Do NOT make any code changes. Do NOT start implementation. Your only job right n
 4. Interactions have edge cases. Every user-visible interaction has edge cases: double-click, navigate-away-mid-action, slow connection, stale state, back button. Map them.
 5. Observability is scope, not afterthought. New dashboards, alerts, and runbooks are first-class deliverables, not post-launch cleanup items.
 6. Diagrams are mandatory. No non-trivial flow goes undiagrammed. ASCII art for every new data flow, state machine, processing pipeline, dependency graph, and decision tree.
-7. Everything deferred must be written down. Vague intentions are lies. TODOS.md or it doesn't exist.
+7. Everything deferred must be written down. Vague intentions are lies. Use a tasks source: prefer a `/tasks/` directory in repo root; otherwise use markdown files in repo root that contain PRD or TASK in the filename; if multiple candidates exist, ask the user to pick. If none exist, ask the user to choose or create one.
 8. Optimize for the 6-month future, not just today. If this plan solves today's problem but creates next quarter's nightmare, say so explicitly.
 9. You have permission to say "scrap it and do this instead." If there's a fundamentally better approach, table it. I'd rather hear it now.
 
@@ -60,10 +60,10 @@ Run the following commands:
 git log --oneline -30                          # Recent history
 git diff main --stat                           # What's already changed
 git stash list                                 # Any stashed work
-grep -r "TODO\|FIXME\|HACK\|XXX" --include="*.rb" --include="*.js" -l
-find . -name "*.rb" -newer Gemfile.lock | head -20  # Recently touched files
+rg -n "TODO|FIXME|HACK|XXX" --glob "*.{ts,tsx,js,jsx}"
+find . -newer pnpm-lock.yaml \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" \) | head -20  # Recently touched files
 ```
-Then read CLAUDE.md, TODOS.md, and any existing architecture docs. Map:
+Then read the project instructions file (AGENTS.md if present, else CLAUDE.md, else README.md), the tasks source (prefer `/tasks/` in repo root; otherwise markdown files in repo root that contain PRD or TASK in the filename; if multiple candidates exist, ask the user to pick; if none exist, ask the user to choose or create one), and any existing architecture docs. Map:
 * What is the current system state?
 * What is already in flight (other open PRs, branches, stashed changes)?
 * What are the existing known pain points most relevant to this plan?
@@ -288,7 +288,7 @@ Test pyramid check: Many unit, fewer integration, few E2E? Or inverted?
 Flakiness risk: Flag any test depending on time, randomness, external services, or ordering.
 Load/stress test requirements: For any new codepath called frequently or processing significant data.
 
-For LLM/prompt changes: Check CLAUDE.md for the "Prompt/LLM changes" file patterns. If this plan touches ANY of those patterns, state which eval suites must be run, which cases should be added, and what baselines to compare against.
+For LLM/prompt changes: Check the project instructions file (AGENTS.md if present, else CLAUDE.md, else README.md) for the "Prompt/LLM changes" file patterns. If this plan touches ANY of those patterns, state which eval suites must be run, which cases should be added, and what baselines to compare against. If no patterns are defined, explicitly state that evals are skipped unless the user specifies otherwise.
 **STOP.** AskUserQuestion once per issue. Do NOT batch. Recommend + WHY. If no issues or fix is obvious, state what you'll do and move on — don't waste a question. Do NOT proceed until user responds.
 
 ### Section 7: Performance Review
@@ -381,7 +381,7 @@ Complete table of every method that can fail, every exception class, rescued sta
 ```
 Any row with RESCUED=N, TEST=N, USER SEES=Silent → **CRITICAL GAP**.
 
-### TODOS.md updates
+### Tasks file updates
 Present each potential TODO as its own individual AskUserQuestion. Never batch TODOs — one per question. Never silently skip this step.
 
 For each TODO, describe:
@@ -394,10 +394,10 @@ For each TODO, describe:
 * **Priority:** P1/P2/P3
 * **Depends on / blocked by:** Any prerequisites or ordering constraints.
 
-Then present options: **A)** Add to TODOS.md **B)** Skip — not valuable enough **C)** Build it now in this PR instead of deferring.
+Then present options: **A)** Add to the tasks source (tasks folder or PRD/TASK markdown) **B)** Skip — not valuable enough **C)** Build it now in this PR instead of deferring.
 
 ### Delight Opportunities (EXPANSION mode only)
-Identify at least 5 "bonus chunk" opportunities (<30 min each) that would make users think "oh nice, they thought of that." Present each delight opportunity as its own individual AskUserQuestion. Never batch them. For each one, describe what it is, why it would delight users, and effort estimate. Then present options: **A)** Add to TODOS.md as a vision item **B)** Skip **C)** Build it now in this PR.
+Identify at least 5 "bonus chunk" opportunities (<30 min each) that would make users think "oh nice, they thought of that." Present each delight opportunity as its own individual AskUserQuestion. Never batch them. For each one, describe what it is, why it would delight users, and effort estimate. Then present options: **A)** Add to the tasks source as a vision item **B)** Skip **C)** Build it now in this PR.
 
 ### Diagrams (mandatory, produce all that apply)
 1. System architecture
@@ -434,7 +434,7 @@ List every ASCII diagram in files this plan touches. Still accurate?
   | Dream state delta    | written                                     |
   | Error/rescue registry| ___ methods, ___ CRITICAL GAPS              |
   | Failure modes        | ___ total, ___ CRITICAL GAPS                |
-  | TODOS.md updates     | ___ items proposed                          |
+  | Tasks file updates   | ___ items proposed                          |
   | Delight opportunities| ___ identified (EXPANSION only)             |
   | Diagrams produced    | ___ (list types)                            |
   | Stale diagrams found | ___                                         |
