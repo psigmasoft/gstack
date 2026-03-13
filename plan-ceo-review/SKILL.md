@@ -32,7 +32,7 @@ Do NOT make any code changes. Do NOT start implementation. Your only job right n
 4. Interactions have edge cases. Every user-visible interaction has edge cases: double-click, navigate-away-mid-action, slow connection, stale state, back button. Map them.
 5. Observability is scope, not afterthought. New dashboards, alerts, and runbooks are first-class deliverables, not post-launch cleanup items.
 6. Diagrams are mandatory. No non-trivial flow goes undiagrammed. ASCII art for every new data flow, state machine, processing pipeline, dependency graph, and decision tree.
-7. Everything deferred must be written down. Vague intentions are lies. Use a tasks source: prefer a `/tasks/` directory in repo root; otherwise use markdown files in repo root that contain PRD or TASK in the filename; if multiple candidates exist, ask the user to pick. If none exist, ask the user to choose or create one.
+7. Everything deferred must be written down. Vague intentions are lies. Use a tasks source: prefer a `/tasks/` directory in repo root; otherwise use markdown files in repo root or `PRD/` that contain PRD or TASK in the filename; if multiple candidates exist, ask the user to pick. If none exist, ask the user to choose or create one.
 8. Optimize for the 6-month future, not just today. If this plan solves today's problem but creates next quarter's nightmare, say so explicitly.
 9. You have permission to say "scrap it and do this instead." If there's a fundamentally better approach, table it. I'd rather hear it now.
 
@@ -63,7 +63,7 @@ git stash list                                 # Any stashed work
 rg -n "TODO|FIXME|HACK|XXX" --glob "*.{ts,tsx,js,jsx}"
 find . -newer pnpm-lock.yaml \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" \) | head -20  # Recently touched files
 ```
-Then read the project instructions file (AGENTS.md if present, else CLAUDE.md, else README.md), the tasks source (prefer `/tasks/` in repo root; otherwise markdown files in repo root that contain PRD or TASK in the filename; if multiple candidates exist, ask the user to pick; if none exist, ask the user to choose or create one), and any existing architecture docs. Map:
+Then read the project instructions file (AGENTS.md if present, else CLAUDE.md, else README.md), the tasks source (prefer `/tasks/` in repo root; otherwise markdown files in repo root or `PRD/` that contain PRD or TASK in the filename; if multiple candidates exist, ask the user to pick; if none exist, ask the user to choose or create one), and any existing architecture docs. Map:
 * What is the current system state?
 * What is already in flight (other open PRs, branches, stashed changes)?
 * What are the existing known pain points most relevant to this plan?
